@@ -5,7 +5,7 @@
 
     <p>{{ Form::label('title', 'Title') }}</p>
     {{ $errors->first('title', '<p class="error">:message</p>') }}
-    <p>{{ Form::text('author', $user->id) }}</p>
+    <p>{{ Form::text('author_id', $user->id) }}</p>
     <p>{{ Form::text('title', Input::old('title')) }}</p>
 
     <p>{{ Form::label('body', 'Body') }}</p>

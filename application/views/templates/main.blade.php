@@ -10,6 +10,8 @@
             @if ( Auth::guest() )
                 {{ HTML::link('admin', 'Login') }}
             @else
+                {{ HTML::link('', 'home') }}
+                {{ HTML::link('admin', 'Skapa') }}
                 {{ HTML::link('logout', 'Logout') }}
             @endif
             <hr />
