@@ -33,7 +33,7 @@ class Report_Controller extends Base_Controller {
 	public function action_index()
 	{
 		$reports = Report::with('user')->all();
-    	return View::make('pages.reports')
+		return View::make('pages.reports')
         	->with('reports',$reports);
 	}
 
@@ -55,7 +55,9 @@ class Report_Controller extends Base_Controller {
 	public function action_create()
 	{
 		// this is our single view
-		return View::make('pages.report_create');
+		$projects = Project::with('user')->all();
+		return View::make('pages.report_create')
+			>with('projects',$projects);
 	}
 	
 	public function action_do_create()

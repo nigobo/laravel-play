@@ -32,26 +32,19 @@
 |
 */
 
-// Route::get('/', function()
-// {
-// 	return View::make('home.index');
-// });
+// Add the blog-controller
 
+Route::controller('blog');
 
-Route::get('/', function() {
-    // this is our list of posts
+Route::get('/','blog@index');
 
-    $posts = Post::with('author')->all();
-    return View::make('pages.home')
-        ->with('posts',$posts);
-});
+Route::get('report','report@index');
 
-Route::get('view/(:num)', function($post) {
-    // this is our single view
-    $post = Post::find($post);
-    return View::make('pages.view')
-        ->with('post',$post);
-});
+Route::get('report/create','report@create');
+
+Route::post('report/create','report@do_create');
+
+Route::get('view/(:num)','blog@view');
 
 Route::get('admin',array('before' => 'auth','do' => function() {
     // show the create new post form
