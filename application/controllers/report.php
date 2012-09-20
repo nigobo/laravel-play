@@ -32,7 +32,8 @@ class Report_Controller extends Base_Controller {
 
 	public function action_index()
 	{
-		$reports = Report::with('user')->all();
+		#$reports = Report::with('user')->all();
+		$reports = DB::('reports')->get();
 		return View::make('pages.reports')
         	->with('reports',$reports);
 	}

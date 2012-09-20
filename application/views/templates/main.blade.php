@@ -2,8 +2,10 @@
 <html lang="en-GB">
     <head>
         <meta charset="UTF-8">
-        <title>Wordpush</title>
+        <title>BinaryBrick</title>
+        {{ HTML::style('media/css/bootstrap.min.css') }}
         {{ HTML::style('css/style.css') }}
+        
     </head>
     <body>
         <div class="header">

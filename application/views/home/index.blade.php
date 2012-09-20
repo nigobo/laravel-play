@@ -5,6 +5,7 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	<title>Laravel: A Framework For Web Artisans</title>
 	<meta name="viewport" content="width=device-width">
+	{{ HTML::style('laravel/media/css/bootstrap-min.css') }}
 	{{ HTML::style('laravel/css/style.css') }}
 </head>
 <body>
