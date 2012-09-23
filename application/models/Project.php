@@ -6,4 +6,9 @@ class Project extends Eloquent
     {
         return $this->belongs_to('User', 'user_id');
     }
+
+    public function reports()
+    {
+        return $this->has_many('Report')->order_by('date','desc');
+    }
 }

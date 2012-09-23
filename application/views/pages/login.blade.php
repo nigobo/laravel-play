@@ -15,4 +15,10 @@
 
     <p>{{ Form::submit('Login') }}</p>
     {{ Form::close() }}
+
+
+    
+
+    <div class="alert">{{ Former::withErrors($errors) }}</div>
+
 @endsection

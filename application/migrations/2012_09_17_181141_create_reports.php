@@ -18,6 +18,7 @@ class Create_Reports {
 			$table->integer('user_id');
 			$table->integer('customer_id');
 			$table->integer('organization_id');
+			$table->integer('project_id');
 			$table->timestamps();
 		});
 	}

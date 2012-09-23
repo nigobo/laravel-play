@@ -3,25 +3,39 @@
     <head>
         <meta charset="UTF-8">
         <title>BinaryBrick</title>
-        {{ HTML::style('media/css/bootstrap.min.css') }}
-        {{ HTML::style('css/style.css') }}
+       
+        {{ Asset::styles() }}
+        {{ Asset::scripts() }}
         
     </head>
     <body>
-        <div class="header">
-            @if ( Auth::guest() )
-                {{ HTML::link('admin', 'Login') }}
-            @else
-                {{ HTML::link('', 'home') }}
-                {{ HTML::link('report/create', 'Logga tid') }}
-                {{ HTML::link('logout', 'Logout') }}
-            @endif
-            <hr />
-            <h1>Wordpush</h1>
-            <h2>Code is Limmericks</h2>
+        <div class="navbar navbar-fixed-top">
+            <div class="navbar-inner">
+                <div class="container">
+                    <a class="brand" href="/">BinaryBrick</a>
+                    <div class="nav-collapse">
+                        <ul class="nav">
+                            @section('navigation')
+                                <li>{{ HTML::link('', 'Home') }}</li>
+                                @if ( Auth::guest() )
+                                    <li>{{ HTML::link('admin', 'Login') }}</li>
+                                @else
+                                    <li>{{ HTML::link('report', 'Rapporter') }}</li>
+                                    <li>{{ HTML::link('project', 'Project') }}</li>
+                                    <li>{{ HTML::link('report/create', 'Logga tid') }}</li>
+                                    <li>{{ HTML::link('logout', 'Logout') }}</li>
+                                @endif
+                            @yield_section
+                        </ul>
+                    </div><!--/.nav-collapse -->
+                </div>
+            </div>
         </div>
-        <div class="content">
+        <div class="container">
             @yield('content')
-        </div>
-    </body>
-</html>
+            <hr>
+            <footer>
+            <p>&copy; BinaryBrick 2012</p>
+            </footer>
+        </div> <!-- /container -->
+        

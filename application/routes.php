@@ -38,11 +38,18 @@ Route::controller('blog');
 
 Route::get('/','blog@index');
 
-Route::get('report','report@index');
-
-Route::get('report/create','report@create');
-
+# Report
+Route::get('report',array('as' => 'reports', 'uses' => 'report@index'));
+Route::get('report/create', array('as' => 'create_report', 'uses' => 'report@create'));
 Route::post('report/create','report@do_create');
+Route::get('report/update/(:num)',array('as' => 'update_report', 'uses' => 'report@update'));
+Route::post('report/update','report@do_update');
+
+# Project
+Route::get('project','project@index');
+Route::get('project/create', 'project@create');
+Route::get('project/view/(:num)','project@view');
+Route::post('project/create','project@do_create');
 
 Route::get('view/(:num)','blog@view');
 
@@ -90,6 +97,7 @@ Route::post('admin', function() {
 
 Route::get('login', function() {
     // show the login form
+
      return View::make('pages.login');
 });
 

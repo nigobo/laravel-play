@@ -1,5 +1,6 @@
 <?php
 
+
 class Report_Controller extends Base_Controller {
 
 	/*
@@ -32,72 +33,97 @@ class Report_Controller extends Base_Controller {
 
 	public function action_index()
 	{
-		#$reports = Report::with('user')->all();
-		$reports = DB::('reports')->get();
-		return View::make('pages.reports')
+		$per_page = 5;
+		$reports = Report::with('project')->order_by('date','desc')->paginate($per_page);
+		
+		return View::make('report.index')
         	->with('reports',$reports);
 	}
 
-	public function action_view($post)
+	public function action_read($post)
 	{
 		// this is our single view
 		$post = Post::find($post);
-		return View::make('pages.view')
+		return View::make('report.read')
 			->with('post',$post);
 	}
 
-	public function action_edit($post)
+	public function action_update($id)
 	{
-		// this is our single view
-		
-		return View::make('pages.report_edit');
+	
+		$projects = DB::table('projects')->order_by('name','asc')->get();
+
+		$report = Report::find($id);
+
+		return View::make('report.update')
+			->with('report',$report)
+			->with('projects',$this->get_selectbox_array($projects,"id","name"));
+
 	}
 
 	public function action_create()
 	{
-		// this is our single view
-		$projects = Project::with('user')->all();
-		return View::make('pages.report_create')
-			>with('projects',$projects);
+	
+		$report = new Report();
+		$projects = DB::table('projects')->order_by('name','asc')->get();
+
+		return View::make('report.create')
+			->with('report',$report)
+			->with('projects',$this->get_selectbox_array($projects,"id","name"));
 	}
 	
 	public function action_do_create()
 	{
-		// let's get the new post from the POST data
-	    // this is much safer than using mass assignment
-	    $new_report = array(
-	        'date' => Input::get('date'),
-	        'description' => Input::get('description'),
-	        'time_spent' => Input::get('time_spent')
-	        
-	    );
+		
+		$user = Auth::user();
 
-	    // let's setup some rules for our new data
-	    // I'm sure you can come up with better ones
-	    // 2012-12-12
-	    $rules = array(
-	        'date' => 'required|min:10|max:10',
-	        'time_spent' => 'required|min:0|max:10',
-	        'description' => 'required'
-	    );
-
-	    // make the validator
-	    $v = Validator::make($new_report, $rules);
+		$v = Report::validate(Input::all());
 	    if ( $v->fails() )
 	    {
-	        // redirect back to the form with
-	        // errors, input and our currently
-	        // logged in user
 	        return Redirect::to('report/create')
 	        ->with('user', Auth::user())
 	        ->with_errors($v)
 	        ->with_input();
 	    }
 
-	    // create the new post
+		$new_report = array(
+	        'date' => Input::get('date'),
+	        'description' => Input::get('description'),
+	        'time_spent' => Input::get('time_spent'),
+	        'project_id' => Input::get('project_id'),
+	        'user_id' => $user->id
+	    );
+
 	    $report = new Report($new_report);
 	    $report->save();
-	    // redirect to viewing our new post
+
+	    return Redirect::to('report');
+		
+	}
+	
+	public function action_do_update()
+	{
+
+		$report = Report::find(Input::get('report_id'));
+
+		$user = Auth::user();
+
+		$v = Report::validate(Input::all());
+	    if ( $v->fails() )
+	    {
+	        return Redirect::to_route('update_report',Input::get('report_id'))
+	        ->with('user', Auth::user())
+	        ->with_errors($v)
+	        ->with_input();
+	    }
+
+	    $report->date = Input::get('date');
+	    $report->description = Input::get('description');
+	    $report->time_spent = Input::get('time_spent');
+	    $report->project_id = Input::get('project_id');
+
+	    $report->save();
+
 	    return Redirect::to('report');
 		
 	}
