@@ -3,7 +3,7 @@
 
     <h1>Skapa tidrapport</h1>
 
-    {{ Form::open('report/create') }}
+    {{ Form::open(URL::current()) }}
 
     @if ($errors->all())
         <ul class="alert">

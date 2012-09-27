@@ -31,6 +31,12 @@ class Report_Controller extends Base_Controller {
 	|
 	*/
 
+	public function __construct()
+	{	
+		parent::__construct();
+		$this->filter('before', 'auth');
+	}
+
 	public function action_index()
 	{
 		$per_page = 5;
@@ -75,12 +81,10 @@ class Report_Controller extends Base_Controller {
 	public function action_do_create()
 	{
 		
-		$user = Auth::user();
-
 		$v = Report::validate(Input::all());
-	    if ( $v->fails() )
-	    {
-	        return Redirect::to('report/create')
+
+	    if ( $v->fails() ){
+	        return Redirect::to_route('create_report')
 	        ->with('user', Auth::user())
 	        ->with_errors($v)
 	        ->with_input();
@@ -91,13 +95,14 @@ class Report_Controller extends Base_Controller {
 	        'description' => Input::get('description'),
 	        'time_spent' => Input::get('time_spent'),
 	        'project_id' => Input::get('project_id'),
-	        'user_id' => $user->id
+	        'user_id' => Auth::user()->id,
+	        'organization_id' => Auth::user()->organization->id	    
 	    );
 
 	    $report = new Report($new_report);
 	    $report->save();
 
-	    return Redirect::to('report');
+	    return Redirect::to_route('reports');
 		
 	}
 	
@@ -106,11 +111,9 @@ class Report_Controller extends Base_Controller {
 
 		$report = Report::find(Input::get('report_id'));
 
-		$user = Auth::user();
-
 		$v = Report::validate(Input::all());
-	    if ( $v->fails() )
-	    {
+
+	    if ( $v->fails() ){
 	        return Redirect::to_route('update_report',Input::get('report_id'))
 	        ->with('user', Auth::user())
 	        ->with_errors($v)

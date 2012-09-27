@@ -34,95 +34,32 @@
 
 // Add the blog-controller
 
-Route::controller('blog');
 
-Route::get('/','blog@index');
+Route::get('/','project@index');
 
 # Report
-Route::get('report',array('as' => 'reports', 'uses' => 'report@index'));
-Route::get('report/create', array('as' => 'create_report', 'uses' => 'report@create'));
-Route::post('report/create','report@do_create');
-Route::get('report/update/(:num)',array('as' => 'update_report', 'uses' => 'report@update'));
-Route::post('report/update','report@do_update');
+Route::get('reports',array('as' => 'reports', 'uses' => 'report@index'));
+Route::get('reports/create', array('as' => 'create_report', 'uses' => 'report@create'));
+Route::post('reports/create','report@do_create');
+Route::get('reports/update/(:num)',array('as' => 'update_report', 'uses' => 'report@update'));
+Route::post('reports/update','report@do_update');
+
+# Customer
+Route::get('customers',array('as' => 'customers', 'uses' => 'customer@index'));
+Route::get('customers/create',array('as' => 'create_customer', 'uses' => 'customer@create'));
+Route::post('customers/create','customer@do_create');
 
 # Project
-Route::get('project','project@index');
-Route::get('project/create', 'project@create');
-Route::get('project/view/(:num)','project@view');
-Route::post('project/create','project@do_create');
+Route::get('projects',array('as' => 'projects', 'uses' => 'project@index'));
+Route::get('projects/create',array('as' => 'create_project', 'uses' => 'project@create'));
+Route::get('projects/(:num)',array('as' => 'read_project', 'uses' => 'project@view'));
+Route::post('projects/create','project@do_create');
 
-Route::get('view/(:num)','blog@view');
+# Login
+Route::get('login',array('as' => 'login', 'uses' => 'login@login'));
+Route::post('login',array('as' => 'do_login', 'uses' => 'login@do_login'));
+Route::get('logout',array('as' => 'logout', 'uses' => 'login@logout'));
 
-Route::get('admin',array('before' => 'auth','do' => function() {
-    // show the create new post form
-    $user = Auth::user();
-    return View::make('pages.new')->with('user', $user);
-}));
-
-Route::post('admin', function() {
-
-    // let's get the new post from the POST data
-    // this is much safer than using mass assignment
-    $new_post = array(
-        'title' => Input::get('title'),
-        'body' => Input::get('body'),
-        'author_id' => Input::get('author_id')
-    );
-
-    // let's setup some rules for our new data
-    // I'm sure you can come up with better ones
-    $rules = array(
-        'title' => 'required|min:3|max:128',
-        'body' => 'required'
-    );
-    // make the validator
-    $v = Validator::make($new_post, $rules);
-    if ( $v->fails() )
-    {
-        // redirect back to the form with
-        // errors, input and our currently
-        // logged in user
-        return Redirect::to('admin')
-        ->with('user', Auth::user())
-        ->with_errors($v)
-        ->with_input();
-    }
-    // create the new post
-    $post = new Post($new_post);
-    $post->save();
-    // redirect to viewing our new post
-    return Redirect::to('view/'.$post->id);
-
-});
-
-Route::get('login', function() {
-    // show the login form
-
-     return View::make('pages.login');
-});
-
-Route::post('login', function() {
-    // handle the login form
-    $userdata = array(
-        'username' => Input::get('username'),
-        'password' => Input::get('password')
-    );
-    if ( Auth::attempt($userdata) )
-    {
-        return Redirect::to('admin');
-    }
-    else
-    {
-        return Redirect::to('login')
-        ->with('login_errors', true);
-    }
-});
-
-Route::get('logout', function() {
-    // logout from the system
-    Auth::logout();
-    return Redirect::to('/');
-});
 
 /*
 |--------------------------------------------------------------------------

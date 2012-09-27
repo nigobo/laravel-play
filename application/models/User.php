@@ -17,4 +17,10 @@ class User extends Eloquent
         return $this->has_many('Project');
     }
 
+    public function organization()
+    {
+        return $this->belongs_to('Organization');
+    }
+
+
 }

@@ -5,10 +5,10 @@
     <table class="table table-striped table-condensed">
     @foreach ($projects as $p)
         <tr class="post">
-            <td>{{ HTML::link('project/view/'.$p->id,$p->name) }}</td>
+            <td>{{ HTML::link_to_route('read_project',$p->name,array($p->id)) }}</td>
             <td>{{ $p->description }}</td>
         </tr>
     @endforeach
     </table>
-    {{ HTML::link('project/create','Skapa projekt')}}
+    {{ HTML::link_to_route('create_project','Skapa projekt')}}
 @endsection

@@ -15,5 +15,5 @@
     </table>
 
     <hr />
-    {{ HTML::link('project','Alla projekt')}}
+    {{ HTML::link_to_route('projects','Alla projekt')}}
 @endsection

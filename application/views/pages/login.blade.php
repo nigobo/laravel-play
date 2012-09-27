@@ -1,7 +1,7 @@
 @layout('templates.main')
 @section('content')
 
-    {{ Form::open('login') }}
+    {{ Form::open(URL::current()) }}
 
     @if (Session::has('login_errors'))
     <span class="error">Username or password incorrect.</span>

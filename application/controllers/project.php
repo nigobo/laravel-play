@@ -30,11 +30,17 @@ class Project_Controller extends Base_Controller {
 	|
 	*/
 
+	public function __construct()
+	{	
+		parent::__construct();
+		$this->filter('before', 'auth');
+	}
+
 	public function action_index()
 	{
 		$per_page = 5;
 		$projects = Project::all();
-		
+
 		return View::make('project.index')
         	->with('projects',$projects);
 	}
@@ -56,9 +62,10 @@ class Project_Controller extends Base_Controller {
 
 	public function action_create()
 	{
-		#$reports = Report::with('user')->all();
+		$customers = Customer::all();
 
-		return View::make('project.create');
+		return View::make('project.create')
+			->with('customers',$this->get_selectbox_array($customers,"id","name"));
 	}
 	
 	public function action_do_create()
@@ -68,28 +75,19 @@ class Project_Controller extends Base_Controller {
 	    // this is much safer than using mass assignment
 	    $new = array(
 	        'name' => Input::get('name'),
-	        'description' => Input::get('description')
-	    
+	        'description' => Input::get('description'),
+			'customer_id' => Input::get('customer_id'),	    
+			'organization_id' => Auth::user()->organization->id	    
 	    );
+		
+		$v = Project::validate($new);
 
-	    // let's setup some rules for our new data
-	    // I'm sure you can come up with better ones
-	    // 2012-12-12
-	    $rules = array(
-	        'name' => 'required|min:2|max:32',
-	        'description' => 'required'
-
-	    );
-
-
-	    // make the validator
-	    $v = Validator::make($new, $rules);
 	    if ( $v->fails() )
 	    {
 	        // redirect back to the form with
 	        // errors, input and our currently
 	        // logged in user
-	        return Redirect::to('project/create')
+	        return Redirect::to_route('create_project')
 	        ->with('user', Auth::user())
 	        ->with_errors($v)
 	        ->with_input();
@@ -103,7 +101,7 @@ class Project_Controller extends Base_Controller {
 
 
 	    // redirect to viewing our new post
-	    return Redirect::to('project');
+	    return Redirect::to_route('projects');
 		
 	}
 

@@ -3,7 +3,7 @@
 
     <h1>Redigera tidrapport</h1>
 
-    {{ Form::open('report/update') }}
+    {{ Form::open(URL::current()) }}
 
     @if ($errors->all())
         <ul class="alert">

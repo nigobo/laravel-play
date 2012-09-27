@@ -18,12 +18,13 @@
                             @section('navigation')
                                 <li>{{ HTML::link('', 'Home') }}</li>
                                 @if ( Auth::guest() )
-                                    <li>{{ HTML::link('admin', 'Login') }}</li>
+                                    <li>{{ HTML::link_to_route('login', 'Login') }}</li>
                                 @else
-                                    <li>{{ HTML::link('report', 'Rapporter') }}</li>
-                                    <li>{{ HTML::link('project', 'Project') }}</li>
-                                    <li>{{ HTML::link('report/create', 'Logga tid') }}</li>
-                                    <li>{{ HTML::link('logout', 'Logout') }}</li>
+                                    <li>{{ HTML::link_to_route('customers', 'Kunder') }}</li>
+                                    <li>{{ HTML::link_to_route('reports', 'Rapporter') }}</li>
+                                    <li>{{ HTML::link_to_route('projects', 'Project') }}</li>
+                                    <li>{{ HTML::link_to_route('create_report', 'Rapportera') }}</li>
+                                    <li>{{ HTML::link_to_route('logout', 'Logga ut') }}</li>
                                 @endif
                             @yield_section
                         </ul>
