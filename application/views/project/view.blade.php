@@ -1,7 +1,7 @@
 @layout('templates.main')
 
 @section('content')
-    <h1>Project {{$project->name}}</h1>
+    <h1>{{$project->name}}</h1>
     
 
     <table class="table">

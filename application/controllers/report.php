@@ -39,8 +39,12 @@ class Report_Controller extends Base_Controller {
 
 	public function action_index()
 	{
+
 		$per_page = 5;
-		$reports = Report::with('project')->order_by('date','desc')->paginate($per_page);
+		
+		$reports = Report::with('project')
+			->order_by('date','desc')
+			->paginate($per_page);
 		
 		return View::make('report.index')
         	->with('reports',$reports);
@@ -54,12 +58,12 @@ class Report_Controller extends Base_Controller {
 			->with('post',$post);
 	}
 
-	public function action_update($id)
+	public function action_update($report_id)
 	{
 	
 		$projects = DB::table('projects')->order_by('name','asc')->get();
 
-		$report = Report::find($id);
+		$report = Report::find($report_id);
 
 		return View::make('report.update')
 			->with('report',$report)
@@ -67,15 +71,20 @@ class Report_Controller extends Base_Controller {
 
 	}
 
-	public function action_create()
+	public function action_create($todo_id = false)
 	{
 	
-		$report = new Report();
-		$projects = DB::table('projects')->order_by('name','asc')->get();
+		if ($todo_id == false) {
+			die("error");
+		}
 
+		$report = new Report();
+		
+		$todo = Todo::find($todo_id);
+		
 		return View::make('report.create')
 			->with('report',$report)
-			->with('projects',$this->get_selectbox_array($projects,"id","name"));
+			->with('todo',$todo);
 	}
 	
 	public function action_do_create()
@@ -94,6 +103,7 @@ class Report_Controller extends Base_Controller {
 	        'date' => Input::get('date'),
 	        'description' => Input::get('description'),
 	        'time_spent' => Input::get('time_spent'),
+	        'todo_id' => Input::get('todo_id'),
 	        'project_id' => Input::get('project_id'),
 	        'user_id' => Auth::user()->id,
 	        'organization_id' => Auth::user()->organization->id	    
@@ -102,7 +112,7 @@ class Report_Controller extends Base_Controller {
 	    $report = new Report($new_report);
 	    $report->save();
 
-	    return Redirect::to_route('reports');
+	    return Redirect::to_route('read_customer',array(Input::get('customer_id')));
 		
 	}
 	
@@ -127,7 +137,7 @@ class Report_Controller extends Base_Controller {
 
 	    $report->save();
 
-	    return Redirect::to('report');
+	    return Redirect::to_route('update_report',array(Input::get('report_id')));
 		
 	}
 

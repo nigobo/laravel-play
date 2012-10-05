@@ -1,6 +1,6 @@
 <?php
 
-class Project_Controller extends Base_Controller {
+class Todo_Controller extends Base_Controller {
 
 	/*
 	|--------------------------------------------------------------------------
@@ -39,18 +39,18 @@ class Project_Controller extends Base_Controller {
 	public function action_index()
 	{
 		// Get all user organization projects
-		$projects = Project::where('organization_id','=',Auth::user()->organization->id)->get();
+		$todos = Todo::with('reports')->get();
 
-		return View::make('project.index')
-        	->with('projects',$projects);
+		return View::make('todo.index')
+        	->with('todos',$todos);
 	}
 
-	public function action_view($id)
+	public function action_read($id)
 	{
 		// this is our single view
-		$project = Project::find($id)->with('reports');
-		return View::make('project.view')
-			->with('project',$project);
+		$todo = Todo::find($id)->with('reports');
+		return View::make('todo.view')
+			->with('todo',$todo);
 	}
 
 	public function action_edit($post)
@@ -60,48 +60,48 @@ class Project_Controller extends Base_Controller {
 		return View::make('pages.report_edit');
 	}
 
-	public function action_create($customer_id)
+	public function action_create($project_id)
 	{
-		$customer = Customer::find($customer_id);
+		$project = Project::find($project_id);
+		
+		$todo = new Todo();
 
-		return View::make('project.create')
-			->with('customer',$customer);
+		return View::make('todo.create')
+			->with('project',$project)
+			->with('todo',$todo);
 	}
 	
 	public function action_do_create()
 	{
 
-		// let's get the new post from the POST data
-	    // this is much safer than using mass assignment
-	    $new = array(
-	        'name' => Input::get('name'),
+		$project = Project::find(Input::get('project_id'));
+		
+		$new = array(
+	        'title' => Input::get('title'),
 	        'description' => Input::get('description'),
-			'customer_id' => Input::get('customer_id'),	    
-			'organization_id' => Auth::user()->organization->id	    
+			'customer_id' => $project->customer_id,	    
+			'project_id' => $project->id,	      
+			'organization_id' => Auth::user()->organization->id	
 	    );
 		
-		$v = Project::validate($new);
+		$v = Todo::validate($new);
 
 	    if ( $v->fails() )
 	    {
-	        // redirect back to the form with
+	    	// redirect back to the form with
 	        // errors, input and our currently
 	        // logged in user
-	        return Redirect::to_route('create_project')
-	        ->with('user', Auth::user())
+	        return Redirect::to_route('create_todo',$project->id)
 	        ->with_errors($v)
 	        ->with_input();
 	    }
 
 	    // create the new post
-	    $o = new Project($new);
-
-	    
+	    $o = new Todo($new);
 	    $o->save();
 
-
 	    // redirect to viewing our new post
-	    return Redirect::to_route('projects');
+	    return Redirect::to_route('read_customer',$project->customer_id);
 		
 	}
 

@@ -15,12 +15,17 @@ class Report extends Eloquent
 
     public function author()
     {
-        return $this->belongs_to('User', 'user_id');
+        return $this->belongs_to('User');
+    }
+
+    public function Todo()
+    {
+        return $this->belongs_to('Todo');
     }
     
     public function project()
     {
-        return $this->belongs_to('Project','project_id')->order_by('name','asc');
+        return $this->belongs_to('Project')->order_by('name','asc');
     }
 
 }

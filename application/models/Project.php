@@ -21,4 +21,9 @@ class Project extends Eloquent
     {
         return $this->has_many('Report')->order_by('date','desc');
     }
+
+    public function todos()
+    {
+        return $this->has_many('Todo');
+    }
 }

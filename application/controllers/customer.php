@@ -39,14 +39,37 @@ class Customer_Controller extends Base_Controller {
 	public function action_index()
 	{
 
+		// Get all customers that belong to an user
 		return View::make('customer.index')
-        	->with('customers',Customer::with('projects')->all());
+			->with(
+				'customers',
+				Customer::with('projects'
+			)
+			->where(
+				'organization_id',
+				'=',
+				Auth::user()->organization->id
+			)->get()
+		);
+	}
+
+	public function action_read($id)
+	{
+		
+		$customer = Customer::find($id)
+			->with('projects')
+			->with('todos');
+		
+		// Get all customers that belong to an user
+		return View::make('customer.read')
+			->with('customer',$customer);
 	}
 
 	public function action_create()
 	{
 	
 		return View::make('customer.create');
+
 	}
 
 	public function action_do_create()
@@ -54,7 +77,8 @@ class Customer_Controller extends Base_Controller {
 		
 		$v = Customer::validate(Input::all());
 
-	    if ( $v->fails() ){
+	    if ( $v->fails() )
+	    {
 	        return Redirect::to_route('create_customer')
 	        ->with('user', Auth::user())
 	        ->with_errors($v)
@@ -73,6 +97,5 @@ class Customer_Controller extends Base_Controller {
 	    return Redirect::to_route('customers');
 		
 	}
-	
 	
 }

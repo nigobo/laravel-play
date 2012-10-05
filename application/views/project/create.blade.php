@@ -12,9 +12,7 @@
         </ul>
     @endif
 
-    <p>{{ Form::label('customer_id', 'Project') }}</p>
-    {{ $errors->first('customer_id', '<p class="alert">:message</p>') }}
-    <p>{{ Form::select('customer_id',$customers, Input::old('customer_id')) }}</p>
+    {{ Form::hidden('customer_id',$customer->id) }}
 
 
     <p>{{ Form::label('name', 'Namn') }}</p>

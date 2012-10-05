@@ -21,8 +21,9 @@
                                     <li>{{ HTML::link_to_route('login', 'Login') }}</li>
                                 @else
                                     <li>{{ HTML::link_to_route('customers', 'Kunder') }}</li>
+                                    <li>{{ HTML::link_to_route('projects', 'Projekt') }}</li>
+                                    <li>{{ HTML::link_to_route('todos', 'Uppgifter') }}</li>
                                     <li>{{ HTML::link_to_route('reports', 'Rapporter') }}</li>
-                                    <li>{{ HTML::link_to_route('projects', 'Project') }}</li>
                                     <li>{{ HTML::link_to_route('create_report', 'Rapportera') }}</li>
                                     <li>{{ HTML::link_to_route('logout', 'Logga ut') }}</li>
                                 @endif

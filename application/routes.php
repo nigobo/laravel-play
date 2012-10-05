@@ -35,25 +35,34 @@
 // Add the blog-controller
 
 
-Route::get('/','project@index');
+Route::get('/','customer@index');
 
 # Report
 Route::get('reports',array('as' => 'reports', 'uses' => 'report@index'));
-Route::get('reports/create', array('as' => 'create_report', 'uses' => 'report@create'));
-Route::post('reports/create','report@do_create');
+Route::get('reports/create/(:num)', array('as' => 'create_report', 'uses' => 'report@create'));
+Route::post('reports/create/(:num)','report@do_create');
 Route::get('reports/update/(:num)',array('as' => 'update_report', 'uses' => 'report@update'));
-Route::post('reports/update','report@do_update');
+Route::post('reports/update/(:num)','report@do_update');
+
+# todos
+Route::get('todos',array('as' => 'todos', 'uses' => 'todo@index'));
+Route::get('todos/(:num)',array('as' => 'read_todo', 'uses' => 'todo@read'));
+Route::get('todos/create/(:num)', array('as' => 'create_todo', 'uses' => 'todo@create'));
+Route::post('todos/create','todo@do_create');
+Route::get('todos/update/(:num)',array('as' => 'update_todo', 'uses' => 'todo@update'));
+Route::post('todos/update','todo@do_update');
 
 # Customer
 Route::get('customers',array('as' => 'customers', 'uses' => 'customer@index'));
+Route::get('customers/(:num)',array('as' => 'read_customer', 'uses' => 'customer@read'));
 Route::get('customers/create',array('as' => 'create_customer', 'uses' => 'customer@create'));
 Route::post('customers/create','customer@do_create');
 
 # Project
 Route::get('projects',array('as' => 'projects', 'uses' => 'project@index'));
-Route::get('projects/create',array('as' => 'create_project', 'uses' => 'project@create'));
+Route::get('projects/create/(:num)',array('as' => 'create_project', 'uses' => 'project@create'));
 Route::get('projects/(:num)',array('as' => 'read_project', 'uses' => 'project@view'));
-Route::post('projects/create','project@do_create');
+Route::post('projects/create/(:num)','project@do_create');
 
 # Login
 Route::get('login',array('as' => 'login', 'uses' => 'login@login'));
